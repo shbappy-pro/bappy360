@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo skip-install",
+  "buildCommand": "node public/_gallery/build.mjs",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "images": {
+    "sizes": [640, 1080],
+    "qualities": [75],
+    "formats": ["image/webp"],
+    "minimumCacheTTL": 2678400,
+    "localPatterns": [{ "pathname": "^/work/.*$", "search": "" }]
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/work/social/manifest.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/(headshot.webp|headshot.png|og-image.jpg)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }]
+    }
+  ]
+}
