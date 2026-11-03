@@ -1,10 +1,17 @@
-// Builds work/social/manifest.json from the images in work/social/<category>/[<brand>/]*.
-// Runs on Vercel at every deploy (see vercel.json "buildCommand"). Zero dependencies.
+// Builds the two gallery manifests at every Vercel deploy (see vercel.json "buildCommand"). Zero dependencies.
 //
+// work/social/manifest.json, from work/social/<category>/[<brand>/]*:
 //   work/social/healthcare/eid-campaign.jpg          -> category "Healthcare"
 //   work/social/ecommerce/lubdok/flash-sale.webp     -> category "Ecommerce", brand "Lubdok"
 //   work/social/motion/reel-01.mp4 (+ reel-01.jpg)   -> video, the .jpg is used as its poster
 //   Names starting with "top-" are featured first on the home page.
+//
+// work/ui/manifest.json, from work/ui/<project>/[desktop|mobile/]*  (see work/ui/README.md):
+//   work/ui/01-Pocket-Wallet/01-home.png             -> project "Pocket Wallet", screen "Home"
+//   work/ui/02-Velvet-Store/desktop/home.jpg         -> website screen (browser frame)
+//   work/ui/02-Velvet-Store/mobile/cart.jpg          -> mobile screen (phone frame)
+//   work/ui/02-Velvet-Store/cover.jpg                -> optional card image instead of the auto mockup
+//   work/ui/02-Velvet-Store/info.txt                 -> optional type, year, tools, link, color, one-line about
 
 import { readdir, readFile, writeFile, mkdir, open } from 'node:fs/promises';
 import path from 'node:path';
@@ -112,10 +119,17 @@ async function videoSize(file) {
   }
 }
 
-function titleFrom(name) {
+const squash = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// "eid-mubarak-campaign.jpg" -> "Eid mubarak campaign". Camera names, counters, "SMD" and a
+// name that only repeats the category ("Ecommerce-SMD-4.jpg" in ecommerce/) give "".
+function titleFrom(name, cat = '') {
   let t = name.replace(/\.[^.]+$/, '').replace(/^top[-_ ]+|^featured[-_ ]+/i, '');
   t = t.replace(/^\d{4}[-_.]?\d{2}[-_.]?\d{2}[-_ ]*/, '').replace(/^\d+[-_ ]+/, '');
   t = t.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+  for (let prev = ''; prev !== t;) { prev = t; t = t.replace(/\s+(\(\d+\)|copy|final|v\d+|\d+)$/i, '').trim(); }
+  t = t.replace(/\b(smd|social media (design|post)s?)\b/gi, ' ').replace(/\s+/g, ' ').trim();
+  if (cat && squash(t) === squash(cat)) return '';
   if (!/[a-z].*[a-z].*[a-z]/i.test(t) || /^(img|dsc|pxl|untitled|artboard|copy|final|post|design|screenshot)\b/i.test(t) || /^[a-f0-9 ]{12,}$/i.test(t)) return '';
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
@@ -147,7 +161,7 @@ for (const file of files) {
   const brand = parts.length > 2 ? pretty(parts[1]) : '';
   const name = parts[parts.length - 1];
   const base = file.replace(/\.[^.]+$/, '').toLowerCase();
-  const item = { src: '/' + toPosix(path.relative(ROOT, file)), cat, brand, title: titleFrom(name) };
+  const item = { src: '/' + toPosix(path.relative(ROOT, file)), cat, brand, title: titleFrom(name, parts[0]) };
   if (/^(top|featured)[-_ ]/i.test(name)) item.top = 1;
 
   if (VIDEO_EXT.has(ext)) {
@@ -180,3 +194,91 @@ for (let i = 0; buckets.some((bk) => i < bk.length); i++) buckets.forEach((bk) =
 await mkdir(SRC, { recursive: true });
 await writeFile(OUT, JSON.stringify({ generated: new Date().toISOString(), total: mixed.length, categories, items: mixed }));
 console.log(`[gallery] ${mixed.length} designs in ${categories.length} categories${skipped ? `, ${skipped} skipped (put files inside a category folder)` : ''} -> ${toPosix(path.relative(ROOT, OUT))}`);
+
+/* ================= UI/UX projects ================= */
+const UI_SRC = path.join(ROOT, 'work', 'ui');
+const UI_OUT = path.join(UI_SRC, 'manifest.json');
+const MOBILE_HINT = /(^|[^a-z])(mobile|ios|android|phone|iphone)([^a-z]|$)/i;
+const WEB_HINT = /(^|[^a-z])(desktop|web|website|landing|dashboard|tablet|macbook)([^a-z]|$)/i;
+const INFO_KEYS = new Set(['name', 'title', 'type', 'year', 'tools', 'link', 'color', 'device', 'client']);
+const slugify = (s) => s.toLowerCase().replace(/^\d+[-_ .]+/, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'project';
+
+// info.txt: "key: value" lines (type, year, tools, link, color, device, client, name); any other line is the one-line about.
+async function readInfo(dir) {
+  for (const n of ['info.txt', 'Info.txt', 'info.md', 'about.txt']) {
+    let txt;
+    try { txt = await readFile(path.join(dir, n), 'utf8'); } catch { continue; }
+    const info = {}, about = [];
+    for (const raw of txt.replace(/^﻿/, '').split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line || line.startsWith('#')) continue;
+      const m = line.match(/^([a-z]+)\s*:\s*(.+)$/i);
+      if (m && INFO_KEYS.has(m[1].toLowerCase())) info[m[1].toLowerCase()] = m[2].trim();
+      else about.push(line);
+    }
+    if (about.length) info.about = about.join(' ');
+    return info;
+  }
+  return {};
+}
+
+// Screen names from Figma ("Frame 427", "iPhone 14 - 3", "Desktop - 1") say nothing, so they give "".
+function screenTitle(file) {
+  let t = path.basename(file).replace(/\.[^.]+$/, '').replace(/^\d+[-_ .]+/, '');
+  t = t.replace(MOBILE_HINT, ' ').replace(WEB_HINT, ' ').replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+  for (let prev = ''; prev !== t;) { prev = t; t = t.replace(/\s+(\(\d+\)|copy|final|v\d+|\d+)$/i, '').trim(); }
+  if (!/^[a-z].*[a-z]/i.test(t) || /^(frame|screen|screenshot|artboard|group|untitled|image|img|page|slide|pixel|galaxy|pro|max|plus|mini|large|medium|small)\b/i.test(t)) return '';
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+let uiEntries = [];
+try { uiEntries = (await readdir(UI_SRC, { withFileTypes: true })).filter((e) => e.isDirectory() && !/^[._]/.test(e.name)); } catch { /* no ui folder yet */ }
+uiEntries.sort((a, b) => natural(a.name, b.name));
+
+const projects = [];
+const slugs = new Set();
+let uiLoose = 0;
+for (const entry of uiEntries) {
+  const dir = path.join(UI_SRC, entry.name);
+  const info = await readInfo(dir);
+  const forced = /^m/i.test(info.device || '') ? 'm' : /^(w|d)/i.test(info.device || '') ? 'w' : '';
+  const screens = [];
+  let cover = null;
+  for (const file of (await walk(dir)).sort((a, b) => natural(a, b))) {
+    if (!IMAGE_EXT.has(path.extname(file).toLowerCase())) continue;
+    const size = await imageSize(file).catch(() => null);
+    if (!size || !size.w || !size.h) continue;
+    const src = '/' + toPosix(path.relative(ROOT, file));
+    const rel = toPosix(path.relative(dir, file));
+    if (/^cover([-_ .]|$)/i.test(path.basename(rel))) { cover = { src, ...size }; continue; }
+    // Device: info.txt "device:", then a desktop/ or mobile/ folder or file name, then the shape.
+    // Phones are narrow and tall at any export scale (375 to 1290 px wide); desktop frames are 1366 px and up.
+    const hint = MOBILE_HINT.test(rel) ? 'm' : WEB_HINT.test(rel) ? 'w' : '';
+    const d = forced || hint || (size.w <= 1300 && size.h / size.w >= 1.5 ? 'm' : 'w');
+    screens.push({ src, ...size, d, title: screenTitle(file) });
+  }
+  if (!screens.length && !cover) continue;
+  const m = screens.filter((s) => s.d === 'm').length, w = screens.length - m;
+  const longWeb = screens.some((s) => s.d === 'w' && s.h / s.w > 1.25);
+  const type = (info.type || (!w ? 'Mobile app' : longWeb ? 'Website' : 'Web app')).slice(0, 40);
+  let slug = slugify(entry.name);
+  for (let n = 2; slugs.has(slug); n++) slug = slugify(entry.name) + '-' + n;
+  slugs.add(slug);
+  const p = { slug, name: info.name || info.title || pretty(entry.name.replace(/^\d+[-_ .]+/, '')), type, tslug: slugify(type), screens };
+  if (/^\d{4}$/.test(info.year || '')) p.year = info.year;
+  if (info.tools) p.tools = info.tools.split(/\s*[,/|]\s*/).filter(Boolean).slice(0, 6);
+  if (/^https?:\/\/\S+$/i.test(info.link || '')) p.link = info.link;
+  if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(info.color || '')) p.color = info.color;
+  if (info.client) p.client = info.client.slice(0, 60);
+  if (info.about) p.about = info.about.slice(0, 240);
+  if (cover) p.cover = cover;
+  projects.push(p);
+}
+try { uiLoose = (await readdir(UI_SRC, { withFileTypes: true })).filter((e) => e.isFile() && IMAGE_EXT.has(path.extname(e.name).toLowerCase())).length; } catch { /* none */ }
+
+const typeCounts = new Map();
+projects.forEach((p) => { const t = typeCounts.get(p.tslug) || { slug: p.tslug, name: p.type, count: 0 }; t.count++; typeCounts.set(p.tslug, t); });
+const screensTotal = projects.reduce((n, p) => n + p.screens.length, 0);
+await mkdir(UI_SRC, { recursive: true });
+await writeFile(UI_OUT, JSON.stringify({ generated: new Date().toISOString(), total: projects.length, screens: screensTotal, types: [...typeCounts.values()].sort((a, b) => b.count - a.count), projects }));
+console.log(`[ui] ${projects.length} projects, ${screensTotal} screens${uiLoose ? `, ${uiLoose} skipped (put screens inside a project folder)` : ''} -> ${toPosix(path.relative(ROOT, UI_OUT))}`);
