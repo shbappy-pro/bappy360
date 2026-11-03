@@ -553,66 +553,125 @@
     .filters button[aria-pressed="true"] { color: #101010; }
     .filters:not(.has-ind) button[aria-pressed="true"] { background: var(--grad); }
     .filters .ind { position: absolute; z-index: 0; top: 5px; left: 0; height: 38px; width: var(--w, 0); border-radius: 999px; background: var(--grad); transform: translateX(var(--x, 0)); transition: transform .5s var(--ease), width .5s var(--ease); }
-
-    .work-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin: 0; padding: 0; list-style: none; }
-    @media (min-width: 760px) { .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    .work-grid > li[hidden] { display: none; }
-    .work-grid > li { transition: opacity .3s, transform .45s var(--ease); }
-    .work-grid > li.is-hiding { opacity: 0; transform: scale(.96); }
-
-    .card {
-      position: relative; height: 100%; display: flex; flex-direction: column; border-radius: var(--radius-lg); overflow: hidden;
-      background: var(--card); border: 1px solid var(--border);
-      transition: border-color .35s, transform .6s var(--ease), box-shadow .4s;
+    @media (max-width: 560px) {
+      .filters { max-width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+      .filters::-webkit-scrollbar { display: none; }
+      .filters button { flex: none; padding: 0 13px; }
     }
-    .card:hover, .card:focus-within { border-color: var(--lime-35); transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(200, 255, 0, .25); }
-    :root[data-theme="light"] .card:hover { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .25); }
-    .card .media { aspect-ratio: 1344 / 768; border-bottom: 1px solid var(--border); }
-    .card .media img { transition: transform 1.1s var(--ease); }
-    .card:hover .media img, .card:focus-within .media img { transform: scale(1.05); }
-    .card-badges { position: absolute; top: 14px; right: 14px; z-index: 1; display: flex; gap: 6px; }
-    .badge { padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-    .badge.cat { background: rgba(200, 255, 0, .9); color: #101010; }
-    .badge.year { background: rgba(16, 16, 16, .7); color: #f0f0f0; border: 1px solid rgba(255, 255, 255, .12); }
-    .card-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 24px; }
-    .card-title { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-    .card-ico { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 11px; background: var(--lime-10); color: var(--accent-text); }
-    .card-ico svg { width: 19px; height: 19px; }
-    .card h3 { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
-    .card h3 button { padding: 0; border: 0; background: none; font: inherit; letter-spacing: inherit; text-align: left; cursor: pointer; }
-    .card h3 button::after { content: ""; position: absolute; inset: 0; z-index: 2; }
-    .card h3 button:focus-visible { outline: none; }
-    .card h3 button:focus-visible::after { outline: 2px solid var(--lime); outline-offset: -2px; border-radius: var(--radius-lg); }
-    .card p { margin: 0; font-size: 15px; color: var(--muted-fg); }
-    .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 18px; }
+
     .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
     .tags li { padding: 3px 11px; border-radius: 999px; font-size: 12px; background: var(--muted); color: var(--muted-fg); }
     .view { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--accent-text); white-space: nowrap; }
     .view svg { width: 14px; height: 14px; transition: transform .4s var(--ease); }
-    .card:hover .view svg { transform: translate(3px, -3px); }
     .work-more { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px; justify-content: center; }
-
-    html.motion .card .media[data-reveal] { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); transition: clip-path 1.2s var(--ease) calc(var(--i, 0) * 90ms); }
-    html.motion .card .media[data-reveal].is-in { clip-path: inset(0 0 0 0); }
-
-    /* Project dialog */
-    .project-dialog {
-      width: min(100% - 24px, 1040px); max-height: min(100dvh - 24px, 920px); padding: 0; border: 1px solid var(--border-2); border-radius: 24px;
-      background: var(--card); color: var(--ink); box-shadow: 0 40px 120px -20px rgb(0 0 0 / .7); overflow: auto;
-    }
-    .project-dialog::backdrop { background: rgb(5 5 5 / .72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-    html.motion .project-dialog[open] { animation: dlg-in .5s var(--ease); }
-    html.motion .project-dialog[open]::backdrop { animation: fade-in .35s ease-out; }
-    @keyframes dlg-in { from { opacity: 0; transform: translateY(30px) scale(.96); } }
     @keyframes fade-in { from { opacity: 0; } }
-    .dlg-media { aspect-ratio: 1344 / 768; border-bottom: 1px solid var(--border); }
-    .dlg-body { display: grid; gap: 24px; padding: clamp(22px, 4vw, 36px); }
-    @media (min-width: 760px) { .dlg-body { grid-template-columns: minmax(0, 1fr) auto; align-items: end; } }
-    .dlg-meta { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-text); }
-    .dlg-body h2 { margin: 6px 0 10px; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; }
-    .dlg-desc { margin: 0 0 14px; color: var(--muted-fg); max-width: 60ch; }
-    .dlg-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-    .dlg-close { position: absolute; top: 14px; right: 14px; z-index: 2; background: var(--glass); backdrop-filter: blur(10px); }
+
+    /* UI/UX projects: each project is shown through its own screens, in phone and browser frames */
+    .ui-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin: 0; padding: 0; list-style: none; }
+    @media (min-width: 760px) { .ui-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ui-item.is-wide { grid-column: 1 / -1; } }
+    .ui-item { transition: opacity .3s, transform .45s var(--ease); }
+    .ui-item.is-hiding { opacity: 0; transform: scale(.96); }
+    html.motion .ui-item:not(.is-in) { opacity: 0; }
+    html.motion .ui-item.is-in .ui-card { animation: ui-in 1s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 110ms); }
+    @keyframes ui-in { from { opacity: 0; transform: translateY(40px); } }
+
+    .ui-card {
+      position: relative; height: 100%; display: flex; flex-direction: column; border-radius: var(--radius-lg); overflow: hidden;
+      background: var(--card); border: 1px solid var(--border); transition: border-color .35s, transform .6s var(--ease), box-shadow .4s;
+    }
+    .ui-card:hover, .ui-card:focus-within { border-color: var(--lime-35); transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(200, 255, 0, .25); }
+    :root[data-theme="light"] .ui-card:hover, :root[data-theme="light"] .ui-card:focus-within { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .25); }
+
+    .ui-stage {
+      --pc: #c8ff00; --pw: 27%; --spread: 1;
+      position: relative; aspect-ratio: 16 / 11; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(70% 78% at 50% 100%, color-mix(in srgb, var(--pc) 40%, transparent), transparent 72%),
+        linear-gradient(color-mix(in srgb, var(--pc) 8%, var(--muted)), var(--muted));
+    }
+    .ui-stage::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 32px 32px;
+      -webkit-mask-image: radial-gradient(80% 80% at 50% 20%, #000, transparent); mask-image: radial-gradient(80% 80% at 50% 20%, #000, transparent);
+    }
+    @media (min-width: 760px) { .ui-item.is-wide .ui-stage { aspect-ratio: 21 / 9; --pw: 15.5%; } }
+    .ui-card:hover .ui-stage, .ui-card:focus-within .ui-stage { --spread: 1.18; }
+
+    .phone {
+      position: absolute; left: 50%; bottom: -15%; z-index: var(--z, 1); width: var(--pw); aspect-ratio: 9 / 19.5; padding: calc(var(--pw) * .034);
+      border-radius: 14% / 6.5%; background: #0c0c0c; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), 0 40px 60px -24px rgba(0, 0, 0, .65);
+      transform-origin: 50% 100%;
+      transform: translateX(calc(-50% + var(--o, 0) * 76% * var(--spread))) translateY(calc(var(--y, 0%) + var(--lift, 0%))) rotate(calc(var(--o, 0) * 5deg * var(--spread))) scale(var(--sc, 1));
+      transition: transform .9s var(--ease);
+    }
+    .phone::after { content: ""; position: absolute; top: 3.2%; left: 50%; width: 30%; height: 2.3%; transform: translateX(-50%); border-radius: 99px; background: #0c0c0c; }
+    .phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 11% / 5%; background: #1c1c1c; }
+    .ui-card:hover .phone.is-c, .ui-card:focus-within .phone.is-c { --lift: -5%; }
+    @media (max-width: 759px) { .phone.is-far { display: none; } }
+
+    .browser {
+      position: absolute; left: 50%; top: 10%; width: 82%; height: 100%; overflow: hidden; border-radius: 12px 12px 0 0; background: #0e0e0e;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 40px 80px -30px rgba(0, 0, 0, .7);
+      transform: translateX(-50%) translateY(calc((1 - var(--spread)) * 18%)); transition: transform .9s var(--ease);
+    }
+    @media (min-width: 760px) { .ui-item.is-wide .browser { width: 66%; } }
+    .b-bar { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; background: #1c1c1c; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+    .b-bar i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #3b3b3b; }
+    .b-bar span { flex: 0 1 44%; min-width: 0; height: 16px; margin: 0 auto; padding: 0 10px; border-radius: 99px; background: #2a2a2a; color: #9a9a9a; font-size: 11px; line-height: 16px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .b-bar::after { content: ""; flex: none; width: 36px; }
+    .b-view { position: absolute; inset: 28px 0 0; overflow: hidden; background: #161616; }
+    .b-view img { display: block; width: 100%; height: auto; transition: transform var(--dur, .9s) cubic-bezier(.45, .05, .35, 1); }
+
+    .st-mixed .browser { left: 6%; width: 72%; transform: translateY(calc((1 - var(--spread)) * 18%)); }
+    .st-mixed .phone { --pw: 21%; left: auto; right: 7%; bottom: -11%; z-index: 2; transform: translateY(calc((1 - var(--spread)) * 26%)); }
+    @media (min-width: 760px) { .ui-item.is-wide .st-mixed .browser { left: 12%; width: 60%; } .ui-item.is-wide .st-mixed .phone { --pw: 13%; right: 13%; } }
+    .st-cover > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
+    .ui-card:hover .st-cover > img, .ui-card:focus-within .st-cover > img { transform: scale(1.04); }
+    .ui-stage img, .uv-body img { opacity: 0; transition: opacity .6s, transform var(--dur, .9s) cubic-bezier(.45, .05, .35, 1); }
+    .ui-stage img.is-ok, .uv-body img.is-ok { opacity: 1; }
+
+    .ui-body { display: flex; flex-direction: column; flex: 1; gap: 4px; padding: 20px 24px 22px; }
+    .ui-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .ui-card h3 { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
+    .ui-card h3 button { padding: 0; border: 0; background: none; font: inherit; letter-spacing: inherit; text-align: left; cursor: pointer; }
+    .ui-card h3 button::after { content: ""; position: absolute; inset: 0; z-index: 3; }
+    .ui-card h3 button:focus-visible { outline: none; }
+    .ui-card h3 button:focus-visible::after { outline: 2px solid var(--lime); outline-offset: -2px; border-radius: var(--radius-lg); }
+    .ui-type { flex: none; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--accent-text); background: var(--lime-10); border: 1px solid var(--lime-20); }
+    .ui-meta { margin: 0; font-size: 13.5px; color: var(--muted-fg); }
+    .ui-about { margin: 6px 0 0; font-size: 15px; color: var(--muted-fg); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .ui-foot { display: flex; margin-top: auto; padding-top: 14px; }
+    .ui-card:hover .view svg, .ui-card:focus-within .view svg { transform: translate(3px, -3px); }
+
+    /* Project viewer: every screen of one project (opens at #ui/<project>) */
+    .uv-actions { display: flex; align-items: center; gap: 8px; }
+    .uv-body { display: grid; gap: 28px; padding-block: 28px 80px; }
+    html.motion .uv-body.is-swap { animation: gal-in .55s var(--ease); }
+    .uv-intro { display: grid; gap: 14px; }
+    .uv-intro p { margin: 0; max-width: 64ch; font-size: 17px; color: var(--muted-fg); }
+    .uv-cover { overflow: hidden; border-radius: 18px; background: var(--muted); border: 1px solid var(--border); }
+    .uv-cover img { width: 100%; }
+    .uv-h { display: flex; align-items: baseline; gap: 10px; margin: 10px 0 -10px; font-family: var(--font-body); font-size: 13px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-text); }
+    .uv-h small { font-size: 12.5px; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted-fg); }
+    .uv-web { display: grid; gap: 32px; }
+    .uv-browser { margin: 0; overflow: hidden; border-radius: 14px; background: #0e0e0e; box-shadow: 0 0 0 1px var(--border-2), 0 30px 70px -30px rgba(0, 0, 0, .6); }
+    .uv-browser .b-bar { height: 34px; }
+    .uv-browser img { width: 100%; background: #161616; }
+    .uv-phones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 40%), 240px)); justify-content: center; gap: clamp(18px, 3vw, 36px) clamp(14px, 2.6vw, 32px); }
+    .uv-phone { display: grid; gap: 12px; justify-items: center; padding: 0; border: 0; background: none; color: var(--muted-fg); font-size: 13px; cursor: zoom-in; }
+    .uv-phone .phone { --pw: 100%; position: relative; left: auto; bottom: auto; width: 100%; transform: none; transition: transform .5s var(--ease); }
+    .uv-phone:hover .phone { transform: translateY(-6px); }
+    .uv-phone:focus-visible { outline: none; }
+    .uv-phone:focus-visible .phone { outline: 2px solid var(--lime); outline-offset: 5px; }
+    .uv-next {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; padding: clamp(20px, 3vw, 30px); border-radius: 20px;
+      background: var(--card); border: 1px solid var(--border); text-decoration: none; transition: border-color .3s;
+    }
+    .uv-next:hover { border-color: var(--lime-35); }
+    .uv-next small { display: block; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-text); }
+    .uv-next b { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); font-weight: 600; letter-spacing: -0.02em; }
+    .uv-next svg { flex: none; width: 28px; height: 28px; color: var(--accent-text); transition: transform .4s var(--ease); }
+    .uv-next:hover svg { transform: translate(4px, -4px); }
 
     /* =========================================================
        Resume
@@ -777,7 +836,7 @@
     .chip-btn small { font-size: 11.5px; font-weight: 600; opacity: .75; font-variant-numeric: tabular-nums; }
     .chip-btn[aria-pressed="true"] { background: var(--grad); color: #101010; border-color: transparent; }
     .chip-btn[aria-pressed="true"] small { opacity: .7; }
-    .demo-note { display: inline-flex; margin: 0 0 18px; padding: 8px 14px; border-radius: 10px; font-size: 13px; color: var(--muted-fg); background: var(--lime-06); border: 1px dashed var(--lime-35); }
+    .demo-note { display: block; width: fit-content; max-width: 100%; margin: 0 0 18px; padding: 8px 14px; border-radius: 10px; font-size: 13px; color: var(--muted-fg); background: var(--lime-06); border: 1px dashed var(--lime-35); }
     .demo-note code { font-size: 12.5px; color: var(--accent-text); }
     .soc-empty { padding: 40px; border-radius: 20px; text-align: center; color: var(--muted-fg); background: var(--card); border: 1px dashed var(--border-2); }
     .soc-empty a { color: var(--accent-text); }
@@ -848,6 +907,8 @@
     .lb-stage { position: relative; min-height: 0; touch-action: pan-y; }
     .lb-holder { position: absolute; inset: 0 clamp(8px, 6vw, 84px); display: grid; place-items: center; }
     .lb-stage img, .lb-stage video { max-width: 100%; max-height: 100%; width: auto; height: auto; min-width: 0; min-height: 0; object-fit: contain; border-radius: 10px; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+    .lb-holder.is-tall { overflow-y: auto; place-items: start center; padding-block: 4px 24px; overscroll-behavior: contain; scrollbar-width: thin; }
+    .lb-stage .lb-holder.is-tall img { width: min(440px, 100%); max-height: none; }
     html.motion .lb-stage .lb-media { animation: lb-in .45s var(--ease); }
     @keyframes lb-in { from { opacity: 0; transform: scale(.97); } }
     .lb-nav { position: absolute; top: 50%; z-index: 2; margin-top: -24px; width: 48px; height: 48px; background: rgba(26, 26, 26, .85); color: #f0f0f0; border-color: rgba(255, 255, 255, .14); }
@@ -1072,100 +1133,26 @@
       </div>
     </section>
 
-    <!-- ================= WORK ================= -->
+    <!-- ================= UI/UX ================= -->
+    <!-- প্রজেক্টগুলো আসে work/ui/manifest.json থেকে। নতুন প্রজেক্ট যোগ করতে public/work/ui/README.md দেখুন, এখানে কিছু বদলাতে হবে না।
+         কোনো প্রজেক্ট আপলোড না থাকলে পুরো সেকশন আর মেনুর "UI/UX" লিংক নিজে থেকেই লুকিয়ে থাকে। -->
     <section class="section section-alt" id="work" aria-labelledby="work-title">
       <div class="wrap">
         <div class="section-head">
           <div>
-            <p class="eyebrow" data-reveal>Case studies</p>
-            <h2 class="section-title mask" id="work-title" data-reveal-mask><span>UI/UX and branding</span></h2>
-            <p class="section-intro" data-reveal>Product and brand projects, kept separate from the social feed. Open any project to see it larger.</p>
+            <p class="eyebrow" data-reveal>UI/UX design</p>
+            <h2 class="section-title mask" id="work-title" data-reveal-mask><span>Apps, dashboards and websites</span></h2>
+            <p class="section-intro" data-reveal>Interface design for mobile apps, web products and landing pages. Open a project to see every screen.</p>
           </div>
-          <div class="filters" id="filters" role="group" aria-label="Filter projects" data-reveal>
+          <div class="filters" id="ui-filters" role="group" aria-label="Filter UI projects" data-reveal hidden>
             <span class="ind" aria-hidden="true"></span>
-            <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="uiux" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg>UI/UX</button>
-            <button type="button" data-filter="branding" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 2.5 2.5-7 7zM17.5 12.5 16 5 2.5 2.5 5 16l7.5 1.5"/></svg>Branding</button>
-            <button type="button" data-filter="campaign" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l15-6v14L3 13zM11 15.5V20a1.5 1.5 0 0 1-3 0v-5.5"/></svg>Campaigns</button>
           </div>
         </div>
-
-        <!-- EDIT: এখানে শুধু UI/UX আর branding কেস স্টাডি। সোশ্যাল মিডিয়া ডিজাইন যায় work/social/ ফোল্ডারে।
-             নতুন প্রজেক্ট = একটা <li> কপি করে পেস্ট করুন।
-             data-cat: uiux | branding | campaign, data-link: প্রজেক্টের Behance লিংক।
-             ছবি public/portfolio/ ফোল্ডারে, সাইজ 1344×768 হলে কাটবে না। -->
-        <ul class="work-grid" id="work-grid" role="list">
-          <li data-cat="uiux" data-link="https://www.behance.net/shbappy">
-            <article class="card">
-              <div class="media" data-reveal><img src="/portfolio/saas-dashboard.png" alt="SaaS analytics dashboard interface" width="1344" height="768" loading="lazy" decoding="async" onerror="imgFail(this)"></div>
-              <div class="card-badges"><span class="badge cat">UI/UX</span><span class="badge year">2025</span></div>
-              <div class="card-body">
-                <div class="card-title"><span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><h3><button type="button" aria-haspopup="dialog">SaaS Analytics Dashboard</button></h3></div>
-                <p>Data-driven dashboard for a B2B SaaS product, with conversion-focused layouts.</p>
-                <div class="card-foot"><ul class="tags" role="list"><li>Dashboard</li><li>SaaS</li><li>Data viz</li></ul><span class="view" aria-hidden="true">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
-              </div>
-            </article>
-          </li>
-          <li data-cat="campaign" data-link="https://www.behance.net/shbappy">
-            <article class="card">
-              <div class="media" data-reveal style="--i:1"><img src="/portfolio/social-luxora.png" alt="Luxora social media campaign posts" width="1344" height="768" loading="lazy" decoding="async" onerror="imgFail(this)"></div>
-              <div class="card-badges"><span class="badge cat">Campaign</span><span class="badge year">2025</span></div>
-              <div class="card-body">
-                <div class="card-title"><span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l15-6v14L3 13zM11 15.5V20a1.5 1.5 0 0 1-3 0v-5.5"/></svg></span><h3><button type="button" aria-haspopup="dialog">Social Media Campaign for Luxora</button></h3></div>
-                <p>A luxury fashion brand's design system, carried across every social touchpoint.</p>
-                <div class="card-foot"><ul class="tags" role="list"><li>Instagram</li><li>Templates</li><li>Fashion</li></ul><span class="view" aria-hidden="true">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
-              </div>
-            </article>
-          </li>
-          <li data-cat="branding" data-link="https://www.behance.net/shbappy">
-            <article class="card">
-              <div class="media" data-reveal><img src="/portfolio/novatech-brand.png" alt="NovaTech brand identity system" width="1344" height="768" loading="lazy" decoding="async" onerror="imgFail(this)"></div>
-              <div class="card-badges"><span class="badge cat">Branding</span><span class="badge year">2024</span></div>
-              <div class="card-body">
-                <div class="card-title"><span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span><h3><button type="button" aria-haspopup="dialog">NovaTech Brand Identity</button></h3></div>
-                <p>A full identity system for an AI startup, from logo to brand guidelines.</p>
-                <div class="card-foot"><ul class="tags" role="list"><li>Logo</li><li>Guidelines</li><li>AI startup</li></ul><span class="view" aria-hidden="true">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
-              </div>
-            </article>
-          </li>
-          <li data-cat="uiux" data-link="https://www.behance.net/shbappy">
-            <article class="card">
-              <div class="media" data-reveal style="--i:1"><img src="/portfolio/ecom-velora.png" alt="Velora e-commerce mobile redesign" width="1344" height="768" loading="lazy" decoding="async" onerror="imgFail(this)"></div>
-              <div class="card-badges"><span class="badge cat">UI/UX</span><span class="badge year">2024</span></div>
-              <div class="card-body">
-                <div class="card-title"><span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg></span><h3><button type="button" aria-haspopup="dialog">E-Commerce Redesign for Velora</button></h3></div>
-                <p>A mobile-first store redesign with a shorter, clearer path to checkout.</p>
-                <div class="card-foot"><ul class="tags" role="list"><li>E-commerce</li><li>Mobile</li><li>Conversion</li></ul><span class="view" aria-hidden="true">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
-              </div>
-            </article>
-          </li>
-          <li data-cat="uiux" data-link="https://www.behance.net/shbappy">
-            <article class="card">
-              <div class="media" data-reveal><img src="/portfolio/healthtrack-app.png" alt="HealthTrack fitness app screens in dark mode" width="1344" height="768" loading="lazy" decoding="async" onerror="imgFail(this)"></div>
-              <div class="card-badges"><span class="badge cat">UI/UX</span><span class="badge year">2024</span></div>
-              <div class="card-body">
-                <div class="card-title"><span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span><h3><button type="button" aria-haspopup="dialog">HealthTrack App Design</button></h3></div>
-                <p>A dark-mode fitness app with an onboarding flow and data visualisation.</p>
-                <div class="card-foot"><ul class="tags" role="list"><li>Mobile app</li><li>Health</li><li>Dark mode</li></ul><span class="view" aria-hidden="true">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
-              </div>
-            </article>
-          </li>
-          <li data-cat="branding" data-link="https://www.behance.net/shbappy">
-            <article class="card">
-              <div class="media" data-reveal style="--i:1"><img src="/portfolio/aiverse-landing.png" alt="AIVerse landing page" width="1344" height="768" loading="lazy" decoding="async" onerror="imgFail(this)"></div>
-              <div class="card-badges"><span class="badge cat">Branding</span><span class="badge year">2024</span></div>
-              <div class="card-body">
-                <div class="card-title"><span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10.7l-5 3.7 1.8 6-4.8-3.6-4.8 3.6 1.8-6-5-3.7 6.1-1.9z"/></svg></span><h3><button type="button" aria-haspopup="dialog">AIVerse Landing Page</button></h3></div>
-                <p>A high-conversion landing page that explains an AI product in seconds.</p>
-                <div class="card-foot"><ul class="tags" role="list"><li>Landing page</li><li>AI</li><li>SaaS</li></ul><span class="view" aria-hidden="true">View <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
-              </div>
-            </article>
-          </li>
-        </ul>
-
+        <p class="demo-note" id="ui-demo" hidden>Sample projects for the preview. Your real screens appear here once they are uploaded to <code>work/ui/</code>.</p>
+        <ul class="ui-grid" id="ui-grid" role="list"></ul>
         <div class="work-more" data-reveal>
           <a class="btn btn-lime" href="https://www.behance.net/shbappy" target="_blank" rel="noopener">More on Behance</a>
-          <a class="btn btn-ghost" href="https://www.figma.com/design/PVJBstSUUY1V3BR70jbwAV/Portfolios---SH-Bappy" target="_blank" rel="noopener">Full Figma portfolio</a>
+          <a class="btn btn-ghost" href="https://dribbble.com/shbappy" target="_blank" rel="noopener">Dribbble</a>
         </div>
       </div>
     </section>
@@ -1178,7 +1165,7 @@
           <div>
             <p class="eyebrow" data-reveal>Social media</p>
             <h2 class="section-title mask" id="social-title" data-reveal-mask><span>Social media designs</span></h2>
-            <p class="section-intro" data-reveal><strong class="hl" data-social-total>1,000+</strong> posts, ads and campaigns for e-commerce, healthcare, media and lifestyle brands. Filter by industry, or open the full gallery.</p>
+            <p class="section-intro" data-reveal><strong class="hl">1,000+</strong> posts, ads and campaigns designed for e-commerce, healthcare, media and lifestyle brands. Filter by industry, or open the full gallery.</p>
           </div>
           <a class="btn btn-ghost" href="#gallery" data-reveal>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
@@ -1448,7 +1435,7 @@
       <ul role="list">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
-        <li><a href="#work">Work</a></li>
+        <li><a href="#work">UI/UX</a></li>
         <li><a href="#social">Social</a></li>
         <li><a href="#resume">Resume</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -1464,7 +1451,7 @@
       <span class="dock-ind" aria-hidden="true"></span>
       <a href="#home">Home</a>
       <a href="#about">About</a>
-      <a href="#work">Work</a>
+      <a href="#work">UI/UX</a>
       <a href="#social">Social</a>
       <a href="#resume">Resume</a>
       <a href="#contact">Contact</a>
@@ -1479,25 +1466,24 @@
     </div>
   </div>
 
-  <!-- Project dialog (filled by script) -->
-  <dialog class="project-dialog" id="project-dialog" aria-labelledby="dlg-title">
-    <button class="icon-btn dlg-close" type="button" data-close aria-label="Close project">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-    </button>
-    <div class="media dlg-media"><img id="dlg-img" src="data:," alt=""></div>
-    <div class="dlg-body">
-      <div>
-        <p class="dlg-meta" id="dlg-meta"></p>
-        <h2 id="dlg-title"></h2>
-        <p class="dlg-desc" id="dlg-desc"></p>
-        <ul class="tags" id="dlg-tags" role="list"></ul>
-      </div>
-      <div class="dlg-actions">
-        <button class="icon-btn" type="button" data-step="-1" aria-label="Previous project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <button class="icon-btn" type="button" data-step="1" aria-label="Next project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
-        <a class="btn btn-lime btn-sm" id="dlg-link" href="https://www.behance.net/shbappy" target="_blank" rel="noopener">See full case study</a>
+  <!-- UI/UX project viewer (opens at #ui/<project>) -->
+  <dialog class="gallery ui-view" id="ui-view" aria-labelledby="uv-title">
+    <div class="gal-bar">
+      <div class="wrap">
+        <div class="gal-row">
+          <button class="icon-btn" type="button" data-uv-close aria-label="Close project">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+          </button>
+          <div class="gal-head"><h2 id="uv-title"></h2><p id="uv-meta"></p></div>
+          <div class="uv-actions">
+            <a class="btn btn-lime btn-sm" id="uv-link" href="https://www.behance.net/shbappy" target="_blank" rel="noopener" hidden></a>
+            <button class="icon-btn" type="button" data-uv-step="-1" aria-label="Previous project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="icon-btn" type="button" data-uv-step="1" aria-label="Next project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="wrap uv-body" id="uv-body"></div>
   </dialog>
 
   <!-- Full social media gallery (opens at #gallery or #gallery/<category>) -->
@@ -1746,72 +1732,6 @@
       });
     }
 
-    /* ---------- Work filter ---------- */
-    const filters = $('#filters');
-    const fButtons = filters ? $$('button[data-filter]', filters) : [];
-    const ind = filters ? $('.ind', filters) : null;
-    const items = $$('#work-grid > li');
-    const moveInd = () => {
-      const active = fButtons.find((b) => b.getAttribute('aria-pressed') === 'true');
-      if (!active || !ind) return;
-      filters.classList.add('has-ind');
-      ind.style.setProperty('--x', active.offsetLeft + 'px');
-      ind.style.setProperty('--w', active.offsetWidth + 'px');
-      ind.style.top = active.offsetTop + 'px';
-    };
-    moveInd();
-    document.fonts?.ready.then(moveInd);
-    window.addEventListener('resize', raf(moveInd));
-    let token = 0;
-    fButtons.forEach((btn) => btn.addEventListener('click', () => {
-      const f = btn.dataset.filter;
-      const match = (li) => f === 'all' || li.dataset.cat === f;
-      fButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      moveInd();
-      const t = ++token;
-      const out = items.filter((li) => !li.hidden && !match(li));
-      const inc = items.filter((li) => li.hidden && match(li));
-      out.forEach((li) => li.classList.add('is-hiding'));
-      setTimeout(() => {
-        if (t !== token) return;
-        out.forEach((li) => { li.hidden = true; li.classList.remove('is-hiding'); });
-        inc.forEach((li) => { li.hidden = false; li.classList.add('is-hiding'); $$('[data-reveal]', li).forEach((el) => el.classList.add('is-in')); });
-        requestAnimationFrame(() => requestAnimationFrame(() => inc.forEach((li) => li.classList.remove('is-hiding'))));
-      }, motion && out.length ? 260 : 0);
-    }));
-
-    /* ---------- Project dialog ---------- */
-    const dlg = $('#project-dialog');
-    if (dlg && typeof dlg.showModal === 'function') {
-      const dImg = $('#dlg-img'), dTitle = $('#dlg-title'), dMeta = $('#dlg-meta');
-      const dDesc = $('#dlg-desc'), dTags = $('#dlg-tags'), dLink = $('#dlg-link'), dMedia = $('.dlg-media', dlg);
-      let current = null, opener = null;
-      const fill = (li) => {
-        current = li;
-        const img = $('img', li);
-        const missing = !!img.closest('.media')?.classList.contains('is-missing');
-        dMedia.classList.toggle('is-missing', missing);
-        dImg.src = missing ? 'data:,' : (img.currentSrc || img.src);
-        dImg.alt = img.alt;
-        dTitle.textContent = $('h3', li).textContent.trim();
-        dMeta.textContent = $$('.badge', li).map((s) => s.textContent.trim()).join(' / ');
-        dDesc.textContent = $('.card-body > p', li).textContent.trim();
-        dTags.innerHTML = $('.tags', li).innerHTML;
-        dLink.href = li.dataset.link || 'https://www.behance.net/shbappy';
-      };
-      const step = (dir) => {
-        const visible = items.filter((li) => !li.hidden);
-        if (!current || visible.length < 2) return;
-        fill(visible[(visible.indexOf(current) + dir + visible.length) % visible.length]);
-      };
-      items.forEach((li) => { const b = $('h3 button', li); b?.addEventListener('click', () => { opener = b; fill(li); if (!dlg.open) dlg.showModal(); }); });
-      $$('[data-step]', dlg).forEach((b) => b.addEventListener('click', () => step(Number(b.dataset.step))));
-      $('[data-close]', dlg)?.addEventListener('click', () => dlg.close());
-      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
-      dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
-      dlg.addEventListener('close', () => opener?.focus());
-    }
-
     /* ---------- Contact form ---------- */
     const form = $('#contact-form'), status = $('#form-status');
     const EMAIL = 'shbappy.pro@gmail.com';
@@ -1853,49 +1773,442 @@
       }
     });
 
-    /* ---------- Social media gallery (data: work/social/manifest.json) ---------- */
-    (async () => {
-      const LIVE = 'https://bappy-alpha.vercel.app';
-      const fmt = (n) => Number(n).toLocaleString('en-US');
-      const isLiveOrigin = location.origin === LIVE;
-      const isPreview = !/^https?:$/.test(location.protocol) || /(^|\.)(localhost|127\.0\.0\.1)$|claude|anthropic|usercontent/.test(location.hostname);
-      const preview = $('#soc-preview');
-      if (!preview) return;
-
-      const fetchJSON = async (url) => {
+    /* ---------- Shared by the UI/UX and social galleries ---------- */
+    const LIVE = 'https://bappy-alpha.vercel.app';
+    const isLiveOrigin = location.origin === LIVE;
+    // A local or Claude preview has no uploads of its own: it reads the live site's files, and shows samples while there are none.
+    const isPreview = !/^https?:$/.test(location.protocol) || /(^|\.)(localhost|127\.0\.0\.1)$|claude|anthropic|usercontent/.test(location.hostname);
+    const fmt = (n) => Number(n).toLocaleString('en-US');
+    const getManifest = async (p, key) => {
+      const get = async (url) => {
         const r = await fetch(url, { cache: 'no-cache' });
         if (!r.ok) throw new Error(String(r.status));
         const j = await r.json();
-        if (!j || !Array.isArray(j.items)) throw new Error('bad manifest');
+        if (!j || !Array.isArray(j[key])) throw new Error('bad manifest');
         return j;
       };
-      let data = null, base = '', demo = false;
-      try { data = await fetchJSON('/work/social/manifest.json'); } catch (e) {
-        if (!isLiveOrigin) { try { data = await fetchJSON(LIVE + '/work/social/manifest.json'); base = LIVE; } catch (e2) { /* not deployed yet */ } }
+      try { return { data: await get(p), base: '' }; } catch (e) {
+        if (!isLiveOrigin) { try { return { data: await get(LIVE + p), base: LIVE }; } catch (e2) { /* not deployed yet */ } }
       }
-      if (isPreview && (!data || !data.items.length)) { data = demoManifest(); demo = true; }
+      return { data: null, base: '' };
+    };
+    // Vercel resizes each image once and caches it. The original file is the fallback (for example past the free monthly limit).
+    const srcsFor = (base, p, w, demo) => {
+      if (!p) return [];
+      if (demo) return [p];
+      const out = [];
+      if (!isPreview || base) out.push(base + '/_vercel/image?url=' + encodeURIComponent(p) + '&w=' + w + '&q=75');
+      out.push(base + p);
+      if (!base && !isLiveOrigin) out.push(LIVE + p);
+      return out;
+    };
+    const loadInto = (img, list, onFail) => {
+      let i = 0;
+      img.onerror = () => { i++; if (i < list.length) img.src = list[i]; else onFail?.(); };
+      img.src = list[0];
+    };
+
+    /* Lightbox: one design or screen at a time. Very tall screens (full app pages) scroll inside it. */
+    const lb = $('#lightbox'), lbHolder = $('#lb-holder');
+    let lbList = [], lbI = 0, lbView = null;
+    const lbShow = () => {
+      const it = lbList[lbI], v = lbView;
+      const tall = !it.video && it.h / it.w > 2.3;
+      lbHolder.textContent = '';
+      lbHolder.classList.toggle('is-tall', tall);
+      lbHolder.scrollTop = 0;
+      let el;
+      if (it.video) {
+        el = document.createElement('video');
+        el.controls = true; el.autoplay = true; el.loop = true; el.muted = true; el.playsInline = true;
+        if (it.poster) el.poster = v.base + it.poster;
+        el.src = v.base + it.src;
+      } else {
+        el = document.createElement('img');
+        el.alt = v.title(it);
+        loadInto(el, v.srcs(it, 1080));
+      }
+      el.className = 'lb-media'; el.width = it.w; el.height = it.h;
+      lbHolder.appendChild(el);
+      $('#lb-count').textContent = fmt(lbI + 1) + ' / ' + fmt(lbList.length);
+      $('#lb-title').textContent = v.title(it);
+      $('#lb-meta').textContent = v.meta(it);
+      [1, -1].forEach((d) => { const n = lbList[(lbI + d + lbList.length) % lbList.length]; if (n && !n.video) { const p = new Image(); p.src = v.srcs(n, 1080)[0]; } });
+    };
+    const lbStep = (d) => { if (lbList.length < 2) return; lbI = (lbI + d + lbList.length) % lbList.length; lbShow(); };
+    const openLightbox = (list, i, view) => { lbList = list; lbI = i; lbView = view; lbShow(); if (!lb.open) lb.showModal(); };
+    $$('[data-lb-step]', lb).forEach((b) => b.addEventListener('click', () => lbStep(Number(b.dataset.lbStep))));
+    $('[data-lb-close]', lb).addEventListener('click', () => lb.close());
+    lb.addEventListener('close', () => { lbHolder.textContent = ''; });
+    lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') lbStep(1); if (e.key === 'ArrowLeft') lbStep(-1); });
+    $('#lb-stage').addEventListener('click', (e) => { if (e.target.id === 'lb-stage' || e.target.id === 'lb-holder') lb.close(); });
+    let lbX = null;
+    lbHolder.addEventListener('pointerdown', (e) => { lbX = e.clientX; });
+    lbHolder.addEventListener('pointerup', (e) => { if (lbX !== null && Math.abs(e.clientX - lbX) > 50) lbStep(e.clientX < lbX ? 1 : -1); lbX = null; });
+
+    /* ---------- UI/UX projects (data: work/ui/manifest.json) ---------- */
+    (async () => {
+      const section = $('#work'), grid = $('#ui-grid');
+      if (!section || !grid) return;
+      let { data, base } = await getManifest('/work/ui/manifest.json', 'projects');
+      let demo = false;
+      if (isPreview && (!data || !data.projects.length)) { data = demoUI(); base = ''; demo = true; }
+      const projects = data?.projects || [];
+      if (!projects.length) {
+        // Nothing uploaded yet: hide the section and its menu links rather than show an empty block.
+        section.hidden = true;
+        $$('a[href="#work"]').forEach((a) => { (a.closest('li') || a).hidden = true; });
+        moveDockInd();
+        return;
+      }
+      $('#ui-demo').hidden = !demo;
+
+      const PALETTE = ['#c8ff00', '#6c8cff', '#ff7a45', '#2dd4bf', '#f472b6', '#facc15'];
+      const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+      const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+      const srcs = (s, w) => srcsFor(base, s.src, w, demo);
+      const mobileOf = (p) => p.screens.filter((s) => s.d === 'm');
+      const webOf = (p) => p.screens.filter((s) => s.d !== 'm');
+      const metaOf = (p) => [p.screens.length + (p.screens.length === 1 ? ' screen' : ' screens'), p.client, p.year, (p.tools || []).join(', ')].filter(Boolean).join(' · ');
+      const linkLabel = (u) => (/behance\.net/.test(u) ? 'View on Behance' : /figma\.com/.test(u) ? 'Open in Figma' : /dribbble\.com/.test(u) ? 'View on Dribbble' : 'Visit live site');
+      const pic = (s, w, alt) => {
+        const img = mk('img');
+        img.alt = alt || ''; img.loading = 'lazy'; img.decoding = 'async'; img.width = s.w; img.height = s.h;
+        img.addEventListener('load', () => img.classList.add('is-ok'), { once: true });
+        loadInto(img, srcs(s, w));
+        return img;
+      };
+      const phone = (s, w, alt) => { const f = mk('div', 'phone'); f.appendChild(pic(s, w, alt)); return f; };
+      const browser = (cls, s, w, label, alt) => {
+        const f = mk(cls === 'browser' ? 'div' : 'figure', cls);
+        const bar = mk('div', 'b-bar');
+        bar.innerHTML = '<i></i><i></i><i></i>';
+        bar.appendChild(mk('span', '', label || ''));
+        if (cls === 'browser') { const v = mk('div', 'b-view'); v.appendChild(pic(s, w, alt)); f.append(bar, v); }
+        else f.append(bar, pic(s, w, alt));
+        return f;
+      };
+
+      // Card picture: phones fanned out for apps, a browser window for websites, both for responsive work, or the project's own cover.
+      const stage = (p, wide) => {
+        const st = mk('div', 'ui-stage');
+        const mob = mobileOf(p), web = webOf(p);
+        if (p.cover) {
+          st.classList.add('st-cover');
+          st.appendChild(pic(p.cover, 1080));
+        } else if (web.length) {
+          st.classList.add(mob.length ? 'st-mixed' : 'st-web');
+          st.appendChild(browser('browser', web[0], 1080));
+          if (mob.length) st.appendChild(phone(mob[0], 640));
+        } else {
+          st.classList.add('st-mobile');
+          const n = Math.min(mob.length, wide ? 5 : 3);
+          const slots = Array.from({ length: n }, (_, k) => k - (n - 1) / 2).sort((a, b) => Math.abs(a) - Math.abs(b) || b - a);
+          mob.slice(0, n).forEach((s, k) => {
+            const o = slots[k], a = Math.abs(o), f = phone(s, 640);
+            f.style.setProperty('--o', String(o));
+            f.style.setProperty('--sc', String(1 - a * 0.09));
+            f.style.setProperty('--y', a * 4 + '%');
+            f.style.setProperty('--z', String(10 - Math.round(a * 2)));
+            if (k === 0) f.classList.add('is-c');
+            if (a > 1.2) f.classList.add('is-far');
+            st.appendChild(f);
+          });
+        }
+        return st;
+      };
+
+      // Long website screens scroll top to bottom while the card is hovered or focused.
+      const scrollPreview = (card) => {
+        const img = $('.b-view img', card);
+        if (!img || !motion) return;
+        const go = () => {
+          const d = img.offsetHeight - img.parentElement.clientHeight;
+          if (d < 40) return;
+          img.style.setProperty('--dur', clamp(d / 320, 1.8, 10).toFixed(2) + 's');
+          img.style.transform = 'translateY(' + -d + 'px)';
+        };
+        const back = () => { img.style.setProperty('--dur', '.9s'); img.style.transform = ''; };
+        card.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') go(); });
+        card.addEventListener('pointerleave', back);
+        card.addEventListener('focusin', go);
+        card.addEventListener('focusout', back);
+      };
+
+      let opener = null;
+      const card = (p, i, wide) => {
+        const li = mk('li', 'ui-item' + (wide ? ' is-wide' : ''));
+        li.style.setProperty('--i', String(wide ? 0 : i % 2));
+        const art = mk('article', 'ui-card');
+        const st = stage(p, wide);
+        st.style.setProperty('--pc', p.color || PALETTE[projects.indexOf(p) % PALETTE.length]);
+        const body = mk('div', 'ui-body');
+        const row = mk('div', 'ui-row');
+        const h = mk('h3'), btn = mk('button', '', p.name);
+        btn.type = 'button';
+        btn.setAttribute('aria-haspopup', 'dialog');
+        btn.addEventListener('click', () => { opener = btn; location.hash = '#ui/' + p.slug; });
+        h.appendChild(btn);
+        row.append(h, mk('span', 'ui-type', p.type));
+        body.append(row, mk('p', 'ui-meta', metaOf(p)));
+        if (p.about) body.appendChild(mk('p', 'ui-about', p.about));
+        const foot = mk('div', 'ui-foot'), v = mk('span', 'view');
+        v.setAttribute('aria-hidden', 'true');
+        v.innerHTML = 'View screens ' + ARROW;
+        foot.appendChild(v);
+        body.appendChild(foot);
+        art.append(st, body);
+        li.appendChild(art);
+        scrollPreview(art);
+        return li;
+      };
+
+      const io = motion ? new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }) : null;
+      let active = 'all', token = 0;
+      const render = (now) => {
+        const list = projects.filter((p) => active === 'all' || p.tslug === active);
+        const wideFirst = list.length >= 3 && list.length % 2 === 1;
+        grid.textContent = '';
+        list.forEach((p, i) => {
+          const li = card(p, i, wideFirst && i === 0);
+          grid.appendChild(li);
+          if (now || !io) li.classList.add('is-in'); else io.observe(li);
+        });
+      };
+      render(false);
+
+      /* Type filter, only when there is more than one type */
+      const types = data.types || [];
+      const fWrap = $('#ui-filters');
+      if (fWrap && types.length > 1) {
+        fWrap.hidden = false;
+        const ind = $('.ind', fWrap);
+        const mkBtn = (slug, name) => { const b = mk('button', '', name); b.type = 'button'; b.dataset.f = slug; b.setAttribute('aria-pressed', String(slug === 'all')); fWrap.appendChild(b); return b; };
+        const btns = [mkBtn('all', 'All'), ...types.map((t) => mkBtn(t.slug, t.name))];
+        const moveInd = () => {
+          const a = btns.find((b) => b.getAttribute('aria-pressed') === 'true');
+          if (!a || !a.offsetWidth) return;
+          fWrap.classList.add('has-ind');
+          ind.style.setProperty('--x', a.offsetLeft + 'px');
+          ind.style.setProperty('--w', a.offsetWidth + 'px');
+          ind.style.top = a.offsetTop + 'px';
+        };
+        btns.forEach((b) => b.addEventListener('click', () => {
+          if (b.dataset.f === active) return;
+          active = b.dataset.f;
+          btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          moveInd();
+          const t = ++token;
+          $$('.ui-item', grid).forEach((li) => li.classList.add('is-hiding'));
+          setTimeout(() => { if (t === token) render(true); }, motion ? 260 : 0);
+        }));
+        moveInd();
+        document.fonts?.ready.then(moveInd);
+        window.addEventListener('resize', raf(moveInd));
+        new ResizeObserver(raf(moveInd)).observe(fWrap);
+      }
+
+      /* Project viewer */
+      const view = $('#ui-view'), vBody = $('#uv-body'), vTitle = $('#uv-title'), vMeta = $('#uv-meta'), vLink = $('#uv-link');
+      if (!view || typeof view.showModal !== 'function') return;
+      let cur = -1, openedFromPage = false;
+      const heading = (name, n) => { const h = mk('h3', 'uv-h', name + ' '); h.appendChild(mk('small', '', n + (n === 1 ? ' screen' : ' screens'))); return h; };
+      const fill = (i) => {
+        cur = i;
+        const p = projects[i], mob = mobileOf(p), web = webOf(p);
+        vTitle.textContent = p.name;
+        vMeta.textContent = p.type + ' · ' + metaOf(p);
+        vLink.hidden = !p.link;
+        if (p.link) { vLink.href = p.link; vLink.textContent = linkLabel(p.link); }
+        vBody.textContent = '';
+        if (p.about) { const intro = mk('div', 'uv-intro'); intro.appendChild(mk('p', '', p.about)); vBody.appendChild(intro); }
+        if (p.cover) { const c = mk('div', 'uv-cover'); c.appendChild(pic(p.cover, 1920, p.name)); vBody.appendChild(c); }
+        const both = mob.length && web.length;
+        if (web.length) {
+          if (both) vBody.appendChild(heading('Desktop', web.length));
+          const wrap = mk('div', 'uv-web');
+          const w = vBody.clientWidth * (window.devicePixelRatio || 1) > 1150 ? 1920 : 1080;
+          web.forEach((s) => wrap.appendChild(browser('uv-browser', s, w, s.title || p.name, p.name + (s.title ? ', ' + s.title : '') + ' screen')));
+          vBody.appendChild(wrap);
+        }
+        if (mob.length) {
+          if (both) vBody.appendChild(heading('Mobile', mob.length));
+          const wrap = mk('div', 'uv-phones');
+          const lv = { base, srcs: (s, w) => srcs(s, w), title: (s) => s.title || p.name, meta: (s) => (s.title ? p.name : p.type) };
+          mob.forEach((s, k) => {
+            const b = mk('button', 'uv-phone');
+            b.type = 'button';
+            b.setAttribute('aria-label', 'Open ' + (s.title || 'screen ' + (k + 1)) + ' larger');
+            b.appendChild(phone(s, 640, ''));
+            if (s.title) b.appendChild(mk('span', '', s.title));
+            b.addEventListener('click', () => openLightbox(mob, k, lv));
+            wrap.appendChild(b);
+          });
+          vBody.appendChild(wrap);
+        }
+        if (projects.length > 1) {
+          const n = projects[(i + 1) % projects.length];
+          const a = mk('a', 'uv-next');
+          a.href = '#ui/' + n.slug;
+          a.innerHTML = '<span><small>Next project</small><b></b></span>' + ARROW;
+          $('b', a).textContent = n.name;
+          a.addEventListener('click', (e) => { e.preventDefault(); go(1); });
+          vBody.appendChild(a);
+        }
+        view.scrollTop = 0;
+        if (motion) { vBody.classList.remove('is-swap'); void vBody.offsetWidth; vBody.classList.add('is-swap'); }
+      };
+      const go = (d) => {
+        const i = (cur + d + projects.length) % projects.length;
+        history.replaceState(history.state, '', '#ui/' + projects[i].slug);
+        fill(i);
+      };
+      const route = () => {
+        const m = location.hash.match(/^#ui\/([\w-]+)$/);
+        const i = m ? projects.findIndex((p) => p.slug === m[1]) : -1;
+        if (i >= 0) { if (!view.open) view.showModal(); if (i !== cur) fill(i); }
+        else if (view.open) view.close();
+      };
+      const closeView = () => {
+        if (openedFromPage) { openedFromPage = false; history.back(); }
+        else { history.replaceState(null, '', location.pathname + location.search); view.close(); }
+      };
+      window.addEventListener('hashchange', (e) => {
+        if (/#ui\//.test(e.newURL) && !/#ui\//.test(e.oldURL)) openedFromPage = true;
+        route();
+      });
+      $('[data-uv-close]', view).addEventListener('click', closeView);
+      $$('[data-uv-step]', view).forEach((b) => b.addEventListener('click', () => go(Number(b.dataset.uvStep))));
+      view.addEventListener('cancel', (e) => { e.preventDefault(); if (!lb.open) closeView(); });
+      view.addEventListener('close', () => { cur = -1; vBody.textContent = ''; opener?.focus({ preventScroll: true }); });
+      view.addEventListener('keydown', (e) => { if (lb.open || e.target.closest('a, input')) return; if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); });
+      route();
+
+      /* Preview-only sample projects, drawn as SVG, so the layout can be judged before real screens are uploaded */
+      function demoUI() {
+        const svg = (w, h, b) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' font-family='Helvetica,Arial,sans-serif'>${b}</svg>`);
+        const R = (x, y, w, h, r, f, o = 1) => `<rect x='${x}' y='${y}' width='${w}' height='${h}' rx='${r}' fill='${f}' opacity='${o}'/>`;
+        const C = (x, y, r, f, o = 1) => `<circle cx='${x}' cy='${y}' r='${r}' fill='${f}' opacity='${o}'/>`;
+        const T = (x, y, s, f, t, wt = 700) => `<text x='${x}' y='${y}' font-size='${s}' font-weight='${wt}' fill='${f}'>${t}</text>`;
+        const G = (t) => `<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${t.acc}'/><stop offset='1' stop-color='${t.acc2}'/></linearGradient></defs>`;
+        const L = (x, y, n, w, t, gap = 22) => Array.from({ length: n }, (_, i) => R(x, y + i * gap, i === n - 1 ? Math.round(w * .6) : w, 10, 5, t.sub, .5)).join('');
+        const dark = (acc, acc2) => ({ bg: '#0f1012', card: '#1c1e22', ink: '#f2f2f2', sub: '#8b8f98', acc, acc2, on: '#0f1012' });
+        const light = (acc, acc2) => ({ bg: '#f6f6f3', card: '#ffffff', ink: '#16171a', sub: '#9a9ca3', acc, acc2, on: '#ffffff' });
+
+        const mobile = (t, kind, head) => {
+          let b = G(t) + R(0, 0, 390, 844, 0, t.bg) + T(30, 34, 15, t.ink, '9:41', 600) + R(320, 24, 40, 12, 4, t.ink, .85);
+          if (kind !== 'start') b += T(24, 100, 30, t.ink, head) + C(350, 90, 20, t.card);
+          if (kind === 'home') {
+            b += R(24, 128, 342, 196, 28, 'url(#g)') + T(50, 176, 15, t.on, 'Total balance', 500) + T(50, 230, 40, t.on, '$12,480') + R(50, 270, 130, 12, 6, t.on, .45) + C(320, 176, 16, t.on, .3);
+            ['Send', 'Receive', 'Top up', 'More'].forEach((l, i) => { b += C(67 + i * 85, 378, 30, t.card) + C(67 + i * 85, 378, 9, t.acc) + T(67 + i * 85 - l.length * 3.6, 432, 13, t.sub, l, 500); });
+            b += T(24, 490, 19, t.ink, 'Recent activity');
+            for (let i = 0; i < 4; i++) b += C(50, 534 + i * 60, 22, t.card) + R(86, 522 + i * 60, 130, 11, 5, t.ink, .85) + R(86, 541 + i * 60, 84, 9, 4, t.sub, .55) + R(296, 526 + i * 60, 70, 12, 6, i % 2 ? t.acc : t.ink, .9);
+          } else if (kind === 'grid') {
+            b += R(24, 126, 342, 52, 26, t.card) + C(52, 152, 9, t.sub, .7) + R(72, 147, 120, 10, 5, t.sub, .5);
+            ['All', 'New', 'Sale', 'Top'].forEach((l, i) => { b += R(24 + i * 84, 198, 74, 36, 18, i ? t.card : t.acc) + T(44 + i * 84, 221, 13, i ? t.sub : t.on, l, 600); });
+            for (let i = 0; i < 4; i++) { const x = 24 + (i % 2) * 175, y = 254 + Math.floor(i / 2) * 250; b += R(x, y, 167, 170, 22, i % 3 ? t.card : 'url(#g)') + C(x + 84, y + 85, 46, i % 3 ? t.acc : t.on, .25) + R(x + 4, y + 186, 110, 11, 5, t.ink, .85) + R(x + 4, y + 206, 60, 11, 5, t.acc); }
+          } else if (kind === 'stats') {
+            b += R(24, 128, 342, 270, 26, t.card) + T(48, 172, 14, t.sub, 'This week', 500) + T(48, 214, 32, t.ink, '68,240');
+            [60, 120, 90, 150, 110, 170, 130].forEach((h, i) => { b += R(52 + i * 44, 376 - h, 22, h, 8, i === 5 ? t.acc : t.sub, i === 5 ? 1 : .35); });
+            for (let i = 0; i < 4; i++) b += R(24, 424 + i * 80, 342, 66, 18, t.card) + C(56, 457 + i * 80, 16, t.acc, .9 - i * .2) + R(86, 446 + i * 80, 120, 10, 5, t.ink, .8) + R(86, 464 + i * 80, 70, 8, 4, t.sub, .5) + R(292, 450 + i * 80, 50, 12, 6, t.ink, .7);
+          } else if (kind === 'detail') {
+            b += R(24, 126, 342, 300, 28, 'url(#g)') + C(195, 276, 80, t.on, .22) + C(195, 276, 40, t.on, .35);
+            b += R(24, 456, 220, 18, 9, t.ink, .9) + R(24, 488, 90, 14, 7, t.acc) + L(24, 528, 4, 330, t);
+            b += R(24, 650, 160, 56, 28, t.card) + R(196, 650, 170, 56, 28, t.acc) + T(236, 684, 15, t.on, 'Continue');
+          } else {
+            b += C(195, 300, 140, 'url(#g)') + C(195, 300, 92, t.bg, .35) + C(195, 300, 44, t.on, .5);
+            b += T(40, 520, 30, t.ink, head) + L(40, 550, 3, 300, t) + R(40, 636, 22, 8, 4, t.acc) + R(68, 636, 8, 8, 4, t.sub, .5) + R(82, 636, 8, 8, 4, t.sub, .5);
+            b += R(24, 690, 342, 58, 29, t.acc) + T(146, 726, 17, t.on, 'Get started');
+          }
+          if (kind !== 'start') b += R(0, 768, 390, 76, 0, t.card) + [0, 1, 2, 3].map((i) => C(63 + i * 88, 798, 10, i ? t.sub : t.acc, i ? .45 : 1)).join('');
+          return svg(390, 844, b + R(128, 828, 134, 5, 3, t.ink, .55));
+        };
+
+        const site = (t, name, h1, h2, nav) => {
+          const H = 4300;
+          let b = G(t) + R(0, 0, 1440, H, 0, t.bg);
+          b += T(120, 70, 28, t.ink, name) + nav.map((l, i) => T(560 + i * 130, 68, 16, t.sub, l, 500)).join('') + R(1180, 38, 140, 48, 24, t.ink) + T(1218, 68, 15, t.bg, 'Sign in', 600);
+          b += T(120, 290, 88, t.ink, h1) + T(120, 390, 88, t.ink, h2) + L(120, 440, 3, 470, t, 26) + R(120, 540, 200, 62, 31, t.acc) + T(160, 578, 18, t.on, 'Get started') + R(336, 540, 170, 62, 31, t.card);
+          b += R(760, 150, 560, 560, 40, 'url(#g)') + C(1040, 430, 170, t.on, .2) + R(800, 610, 240, 64, 18, t.card, .95) + R(822, 632, 130, 10, 5, t.ink, .8) + R(822, 650, 80, 8, 4, t.sub, .6);
+          for (let i = 0; i < 5; i++) b += R(120 + i * 250, 800, 150, 34, 8, t.sub, .22);
+          b += T(120, 970, 48, t.ink, 'Why people choose us');
+          for (let i = 0; i < 3; i++) { const x = 120 + i * 410; b += R(x, 1010, 380, 300, 28, t.card) + C(x + 58, 1068, 26, t.acc, .9) + R(x + 32, 1132, 220, 16, 8, t.ink, .85) + L(x + 32, 1168, 4, 300, t); }
+          b += T(120, 1450, 48, t.ink, 'New this week');
+          for (let i = 0; i < 8; i++) { const x = 120 + (i % 4) * 305, y = 1490 + Math.floor(i / 4) * 470; b += R(x, y, 285, 340, 24, i % 3 === 0 ? 'url(#g)' : t.card) + C(x + 142, y + 170, 70, i % 3 === 0 ? t.on : t.acc, .22) + R(x + 4, y + 362, 180, 14, 7, t.ink, .85) + R(x + 4, y + 390, 80, 14, 7, t.acc); }
+          b += R(120, 2480, 1200, 440, 40, 'url(#g)') + T(200, 2650, 64, t.on, 'Ready when you are') + R(200, 2700, 420, 14, 7, t.on, .5) + R(200, 2760, 210, 62, 31, t.on) + C(1110, 2700, 150, t.on, .16);
+          b += T(120, 3090, 48, t.ink, 'Loved by 20,000+ people');
+          for (let i = 0; i < 3; i++) { const x = 120 + i * 410; b += R(x, 3130, 380, 260, 28, t.card) + L(x + 32, 3170, 4, 300, t) + C(x + 56, 3330, 24, t.acc, .7) + R(x + 92, 3322, 120, 12, 6, t.ink, .8); }
+          b += R(0, 3520, 1440, H - 3520, 0, t.card) + T(120, 3620, 30, t.ink, name) + L(120, 3650, 3, 300, t);
+          for (let i = 0; i < 3; i++) b += R(620 + i * 240, 3600, 100, 14, 7, t.ink, .8) + L(620 + i * 240, 3640, 4, 150, t, 30);
+          return svg(1440, H, b + R(120, 4180, 1200, 1, 0, t.sub, .3) + R(120, 4220, 240, 10, 5, t.sub, .5));
+        };
+
+        const dash = (t, title, k) => {
+          let b = G(t) + R(0, 0, 1440, 960, 0, t.bg) + R(0, 0, 250, 960, 0, t.card) + C(52, 54, 16, t.acc) + T(80, 62, 22, t.ink, 'Pulse');
+          ['Overview', 'Reports', 'Customers', 'Revenue', 'Campaigns', 'Settings'].forEach((l, i) => { const on = l === title; b += (on ? R(18, 118 + i * 54, 214, 44, 12, t.acc, .14) : '') + C(48, 140 + i * 54, 7, on ? t.acc : t.sub, on ? 1 : .6) + T(68, 146 + i * 54, 15, on ? t.ink : t.sub, l, on ? 700 : 500); });
+          b += R(290, 28, 420, 48, 24, t.card) + C(318, 52, 8, t.sub, .6) + R(338, 47, 140, 10, 5, t.sub, .4) + R(1220, 34, 130, 36, 18, t.acc) + C(1384, 52, 20, t.card) + T(290, 140, 32, t.ink, title);
+          if (k === 0) {
+            ['Revenue', 'Users', 'Orders', 'Churn'].forEach((l, i) => {
+              const x = 290 + i * 280;
+              b += R(x, 168, 260, 132, 20, t.card) + T(x + 24, 204, 14, t.sub, l, 500) + T(x + 24, 250, 30, t.ink, ['$84.2k', '12,940', '3,211', '2.4%'][i]);
+              b += `<polyline points='${x + 150},272 ${x + 175},256 ${x + 195},263 ${x + 215},238 ${x + 236},246' fill='none' stroke='${i === 3 ? '#ff6b66' : t.acc}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>`;
+            });
+            const pts = [120, 160, 140, 210, 190, 250, 230, 290, 270, 320, 300, 340].map((v, i) => [330 + i * 62, 700 - v]);
+            b += R(290, 324, 760, 400, 20, t.card) + T(314, 364, 18, t.ink, 'Revenue over time') + [0, 1, 2, 3].map((i) => R(314, 430 + i * 70, 712, 1, 0, t.sub, .25)).join('');
+            b += `<path d='M${pts.map((p) => p.join(' ')).join(' L')} L${pts[11][0]} 700 L${pts[0][0]} 700 Z' fill='${t.acc}' opacity='.14'/><polyline points='${pts.map((p) => p.join(',')).join(' ')}' fill='none' stroke='${t.acc}' stroke-width='4' stroke-linejoin='round'/>`;
+            b += R(1074, 324, 326, 400, 20, t.card) + T(1098, 364, 18, t.ink, 'Traffic source');
+            b += `<circle cx='1237' cy='530' r='90' fill='none' stroke='${t.sub}' stroke-opacity='.2' stroke-width='28'/><circle cx='1237' cy='530' r='90' fill='none' stroke='${t.acc}' stroke-width='28' stroke-dasharray='330 566' transform='rotate(-90 1237 530)'/><circle cx='1237' cy='530' r='90' fill='none' stroke='${t.acc2}' stroke-width='28' stroke-dasharray='130 566' stroke-dashoffset='-340' transform='rotate(-90 1237 530)'/>`;
+            b += C(1110, 670, 6, t.acc) + R(1124, 665, 70, 10, 5, t.sub, .6) + C(1250, 670, 6, t.acc2) + R(1264, 665, 70, 10, 5, t.sub, .6);
+            b += R(290, 748, 1110, 190, 20, t.card);
+            for (let i = 0; i < 3; i++) b += C(330, 800 + i * 48, 14, t.acc, .6) + R(358, 794 + i * 48, 180, 11, 5, t.ink, .8) + R(700, 794 + i * 48, 120, 11, 5, t.sub, .5) + R(1260, 790 + i * 48, 100, 20, 10, t.acc, .2);
+          } else {
+            ['All', 'Active', 'New', 'At risk'].forEach((l, i) => { b += R(290 + i * 120, 168, 108, 40, 20, i ? t.card : t.acc) + T(316 + i * 120, 194, 14, i ? t.sub : t.on, l, 600); });
+            b += R(290, 232, 1110, 700, 20, t.card) + R(290, 232, 1110, 56, 0, t.sub, .08);
+            for (let i = 0; i < 9; i++) { const y = 316 + i * 68; b += C(330, y, 18, i % 3 ? t.sub : t.acc, i % 3 ? .35 : .7) + R(362, y - 12, 170, 11, 5, t.ink, .85) + R(362, y + 6, 120, 9, 4, t.sub, .5) + R(700, y - 6, 140, 11, 5, t.sub, .55) + R(960, y - 12, 90, 24, 12, i % 4 === 3 ? '#ff6b66' : t.acc, .22) + R(1250, y - 6, 110, 12, 6, t.ink, .7) + (i < 8 ? R(310, y + 33, 1070, 1, 0, t.sub, .18) : ''); }
+          }
+          return svg(1440, 960, b);
+        };
+
+        const ms = (t, list) => list.map(([kind, title, head]) => ({ src: mobile(t, kind, head || title), w: 390, h: 844, d: 'm', title }));
+        const web = (src, h, title) => ({ src, w: 1440, h, d: 'w', title });
+        const wallet = dark('#c8ff00', '#6b8e23'), store = light('#ff6a3d', '#ffb38a'), pulse = dark('#6c8cff', '#a78bfa');
+        const food = light('#f59e0b', '#fcd34d'), nest = light('#0f766e', '#5eead4');
+        const projects = [
+          { slug: 'pocket-wallet', name: 'Pocket Wallet', type: 'Mobile app', tslug: 'mobile-app', year: '2025', tools: ['Figma'], color: '#c8ff00', about: 'Sample project: a personal finance app. Real projects replace these once uploaded.',
+            screens: ms(wallet, [['home', 'Wallet'], ['start', 'Welcome', 'Money, made simple'], ['stats', 'Insights'], ['grid', 'Cards'], ['detail', 'Savings plan', 'Plan']]) },
+          { slug: 'velvet-store', name: 'Velvet Store', type: 'Website', tslug: 'website', year: '2025', tools: ['Figma'], color: '#ff6a3d',
+            screens: [web(site(store, 'Velvet', 'Made to', 'be lived in.', ['Shop', 'Collections', 'About', 'Journal']), 4300, 'Home'), ...ms(store, [['grid', 'Shop'], ['detail', 'Product'], ['stats', 'Orders']])] },
+          { slug: 'pulse-analytics', name: 'Pulse Analytics', type: 'Dashboard', tslug: 'dashboard', year: '2024', tools: ['Figma', 'FigJam'], color: '#6c8cff',
+            screens: [web(dash(pulse, 'Overview', 0), 960, 'Overview'), web(dash(pulse, 'Customers', 1), 960, 'Customers')] },
+          { slug: 'foodie-go', name: 'Foodie Go', type: 'Mobile app', tslug: 'mobile-app', year: '2024', tools: ['Figma'], color: '#f59e0b',
+            screens: ms(food, [['grid', 'Explore'], ['detail', 'Dish'], ['start', 'Welcome', 'Dinner, sorted'], ['stats', 'Orders']]) },
+          { slug: 'nest-realty', name: 'Nest Realty', type: 'Website', tslug: 'website', year: '2024', tools: ['Figma', 'Webflow'], color: '#14b8a6',
+            screens: [web(site(nest, 'Nest', 'Find a home', 'you will love.', ['Buy', 'Rent', 'Sell', 'Agents']), 4300, 'Home')] },
+        ];
+        const types = [];
+        projects.forEach((p) => { const t = types.find((x) => x.slug === p.tslug); if (t) t.count++; else types.push({ slug: p.tslug, name: p.type, count: 1 }); });
+        return { total: projects.length, types, projects };
+      }
+    })();
+
+    /* ---------- Social media gallery (data: work/social/manifest.json) ---------- */
+    (async () => {
+      const preview = $('#soc-preview');
+      if (!preview) return;
+
+      let { data, base } = await getManifest('/work/social/manifest.json', 'items');
+      let demo = false;
+      if (isPreview && (!data || !data.items.length)) { data = demoManifest(); base = ''; demo = true; }
       data = data || { items: [], categories: [] };
 
       const items = data.items, cats = data.categories || [];
       const catName = Object.fromEntries(cats.map((c) => [c.slug, c.name]));
-      const label = (it) => it.title || catName[it.cat] || 'Social media design';
-      const sub = (it) => [catName[it.cat], it.brand].filter(Boolean).join(' / ');
+      // Untitled designs ("Ecommerce-SMD-4.jpg") are named after their category instead.
+      const label = (it) => it.title || (catName[it.cat] || 'Social media') + ' design';
+      const sub = (it) => [it.title ? catName[it.cat] : '', it.brand].filter(Boolean).join(' / ');
       const hay = (it) => (label(it) + ' ' + (it.brand || '') + ' ' + (catName[it.cat] || '')).toLowerCase();
-      const optimized = (p, w) => base + '/_vercel/image?url=' + encodeURIComponent(p) + '&w=' + w + '&q=75';
-      const sources = (p, w, it) => {
-        if (!p) return [];
-        if (it.demo) return [p];
-        const out = [];
-        if (!isPreview || base) out.push(optimized(p, w));
-        out.push(base + p);
-        if (!base && !isLiveOrigin) out.push(LIVE + p);
-        return out;
-      };
-      const loadInto = (img, list, onFail) => {
-        let i = 0;
-        img.onerror = () => { i++; if (i < list.length) img.src = list[i]; else onFail?.(); };
-        img.src = list[0];
-      };
+      const sources = (p, w, it) => srcsFor(base, p, w, it.demo);
+      const lbSocial = { base, srcs: (it, w) => sources(it.src, w, it), title: label, meta: sub };
 
       $$('[data-social-total]').forEach((el) => { el.textContent = fmt(items.length); });
       $('#soc-demo').hidden = !demo;
@@ -1945,7 +2258,7 @@
         meta.append(t, m);
         b.appendChild(meta);
         if (it.video) b.insertAdjacentHTML('beforeend', '<span class="tile-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg></span>');
-        b.addEventListener('click', () => openLightbox(list, i));
+        b.addEventListener('click', () => openLightbox(list, i, lbSocial));
         return b;
       };
 
@@ -2047,41 +2360,6 @@
       $('[data-gal-close]', gal).addEventListener('click', closeGallery);
       gal.addEventListener('cancel', (e) => { e.preventDefault(); if (!lb.open) closeGallery(); });
       route();
-
-      /* Lightbox */
-      const lb = $('#lightbox'), holder = $('#lb-holder');
-      let lbList = [], lbI = 0;
-      const lbShow = () => {
-        const it = lbList[lbI];
-        holder.textContent = '';
-        let el;
-        if (it.video) {
-          el = document.createElement('video');
-          el.controls = true; el.autoplay = true; el.loop = true; el.muted = true; el.playsInline = true;
-          if (it.poster) el.poster = base + it.poster;
-          el.src = base + it.src;
-        } else {
-          el = document.createElement('img');
-          el.alt = label(it);
-          loadInto(el, sources(it.src, 1080, it));
-        }
-        el.className = 'lb-media'; el.width = it.w; el.height = it.h;
-        holder.appendChild(el);
-        $('#lb-count').textContent = fmt(lbI + 1) + ' / ' + fmt(lbList.length);
-        $('#lb-title').textContent = label(it);
-        $('#lb-meta').textContent = sub(it);
-        [1, -1].forEach((d) => { const n = lbList[(lbI + d + lbList.length) % lbList.length]; if (n && !n.video) { const p = new Image(); p.src = sources(n.src, 1080, n)[0]; } });
-      };
-      const lbStep = (d) => { if (lbList.length < 2) return; lbI = (lbI + d + lbList.length) % lbList.length; lbShow(); };
-      function openLightbox(list, i) { lbList = list; lbI = i; lbShow(); if (!lb.open) lb.showModal(); }
-      $$('[data-lb-step]', lb).forEach((b) => b.addEventListener('click', () => lbStep(Number(b.dataset.lbStep))));
-      $('[data-lb-close]', lb).addEventListener('click', () => lb.close());
-      lb.addEventListener('close', () => { holder.textContent = ''; });
-      lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') lbStep(1); if (e.key === 'ArrowLeft') lbStep(-1); });
-      $('#lb-stage').addEventListener('click', (e) => { if (e.target.id === 'lb-stage' || e.target.id === 'lb-holder') lb.close(); });
-      let x0 = null;
-      holder.addEventListener('pointerdown', (e) => { x0 = e.clientX; });
-      holder.addEventListener('pointerup', (e) => { if (x0 !== null && Math.abs(e.clientX - x0) > 50) lbStep(e.clientX < x0 ? 1 : -1); x0 = null; });
 
       /* Preview-only sample tiles, so the layout can be judged before real uploads */
       function demoManifest() {

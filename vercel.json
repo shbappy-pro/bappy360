@@ -6,7 +6,7 @@
   "outputDirectory": "public",
   "cleanUrls": true,
   "images": {
-    "sizes": [640, 1080],
+    "sizes": [640, 1080, 1920],
     "qualities": [75],
     "formats": ["image/webp"],
     "minimumCacheTTL": 2678400,
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "source": "/work/social/manifest.json",
+      "source": "/work/(social|ui)/manifest.json",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }
