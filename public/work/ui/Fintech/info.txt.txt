@@ -1,0 +1,6 @@
+type: Webpages
+year: 2023
+tools: Figma, Adobe Photoshop
+link: https://www.behance.net/gallery/128231659/Finsurance-Banking-Service-Website
+color: #019FD
+Analytics Fintech website web pages
